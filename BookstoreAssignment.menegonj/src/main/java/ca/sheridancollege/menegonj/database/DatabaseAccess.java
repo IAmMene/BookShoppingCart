@@ -56,11 +56,12 @@ public class DatabaseAccess {
         jdbc.update(query, namedParameters);
     }
 
-    public void deleteBook(Long isbn) {
-        MapSqlParameterSource namedParameter = new MapSqlParameterSource();
-        namedParameter.addValue("isbn", isbn);
-
-        String query = "DELETE FROM book WHERE isbn = :isbn";
-        jdbc.update(query, namedParameter);
-    }
+	public void deleteBookByIsbn(Long isbn) {
+	    MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+	    String query = "DELETE FROM book WHERE isbn = :isbn";
+	    namedParameters.addValue("isbn", isbn);
+	    if (jdbc.update(query, namedParameters) > 0) {
+	        System.out.println("Deleted book with ISBN " + isbn + " from the database.");
+	    }
+	}
 }

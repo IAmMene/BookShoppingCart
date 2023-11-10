@@ -31,7 +31,7 @@ public class BookService {
         databaseAccess.updateBook(book);
     }
 
-    public void deleteBook(Long id) {
-        databaseAccess.deleteBook(id);
+    public void deleteBook(Long isbn) {
+        databaseAccess.deleteBookByIsbn(isbn);
     }
 }

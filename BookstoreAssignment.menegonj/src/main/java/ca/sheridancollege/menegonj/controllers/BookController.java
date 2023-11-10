@@ -93,6 +93,12 @@ public class BookController {
 
         return "redirect:/books"; // Redirect to the book list after updating
     }
-
-
+    
+    @GetMapping("/deleteBookByIsbn/{isbn}")
+    public String deleteBookByIsbn(Model model, @PathVariable Long isbn) {
+        bookService.deleteBook(isbn);
+        List<Book> books = bookService.getAllBooks();
+        model.addAttribute("books", books);
+        return "books";
+    }
 }
