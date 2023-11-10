@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Books</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.isbn}">ISBN</td>
+            <td th:text="${book.title}">Title</td>
+            <td>
+                <a th:href="@{'/books/' + ${book.isbn}}">View Details</a>
+                <a th:href="@{'/editBook/' + ${book.isbn}}" class="th-btn-edit">Edit</a>
+    			<a th:href="@{'/deleteBook/' + ${book.isbn}}" class="th-btn-delete">Delete</a>
+            </td>
+        </tr>
+    </table>
+    <a th:href="@{/index}">Return to Main Page</a>
+</body>
+</html>
