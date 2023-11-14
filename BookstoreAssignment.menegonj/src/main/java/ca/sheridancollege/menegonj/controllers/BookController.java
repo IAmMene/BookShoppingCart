@@ -32,19 +32,10 @@ public class BookController {
 	}
 	
 	@GetMapping("/books")
-	public String browseBooks(Model model, HttpSession session) {
-	    if (session.isNew()) {
-	        session.setAttribute("booksList", new ArrayList<Book>());
-	    }
-
-	    // Fetch books and add them to the model
-	    List<Book> books = bookService.getAllBooks();
-	    model.addAttribute("books", books);
-
-	    // Add an empty book object for the form
-	    model.addAttribute("book", new Book()); // Assuming you have a Book class
-
-	    return "books"; // Assuming the view name is "books.html"
+	public String browseBooks(Model model) {
+		List<Book> books = bookService.getAllBooks();
+		model.addAttribute("books", books);
+		return "books"; 
 	}
 	
     @GetMapping("/books/{isbn}")
@@ -110,5 +101,4 @@ public class BookController {
         model.addAttribute("books", books);
         return "books";
     }
-
 }
