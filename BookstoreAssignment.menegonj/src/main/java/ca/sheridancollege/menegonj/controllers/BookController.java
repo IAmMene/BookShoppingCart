@@ -31,12 +31,16 @@ public class BookController {
 		return "index";
 	}
 	
-	@GetMapping("/books")
-	public String browseBooks(Model model) {
-		List<Book> books = bookService.getAllBooks();
-		model.addAttribute("books", books);
-		return "books"; 
-	}
+    @GetMapping("/books")
+    public String browseBooks(Model model) {
+        List<Book> books = bookService.getAllBooks();
+        model.addAttribute("books", books);
+
+        // Instantiate a new Book object for the form
+        model.addAttribute("newBook", new Book());
+
+        return "books";
+    }
 	
     @GetMapping("/books/{isbn}")
     public String viewBookDetails(@PathVariable Long isbn, Model model) {
@@ -54,7 +58,7 @@ public class BookController {
 
         model.addAttribute("books", books);
 
-        return "insert"; 
+        return "redirect:/books"; 
     }
     
     @GetMapping("/insert")
@@ -94,11 +98,19 @@ public class BookController {
         return "redirect:/books"; // Redirect to the book list after updating
     }
     
-    @GetMapping("/deleteBookByIsbn/{isbn}")
-    public String deleteBookByIsbn(Model model, @PathVariable Long isbn) {
+    @GetMapping("/deleteBook/{isbn}")
+    public String deleteBook(@PathVariable Long isbn, Model model) {
+        // Delete the book by its ID
         bookService.deleteBook(isbn);
+
+        // Re-populate the book list
         List<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
-        return "books";
+
+        // Add the newBook object for the form
+        model.addAttribute("newBook", new Book());
+
+        return "redirect:/books";
     }
+
 }
