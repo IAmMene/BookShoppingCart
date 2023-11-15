@@ -43,6 +43,21 @@
 
 		<button type="submit">Add Book</button>
 	</form>
+	<!-- Your existing books.html content -->
+	<table>
+		<tr th:each="book : ${books}">
+			<td th:text="${book.title}"></td>
+			<td th:text="${book.author}"></td>
+			<td th:text="${book.price}"></td>
+			<!-- Add to Cart button -->
+			<td>
+				<form th:action="@{/addToCart/{isbn}(isbn=${book.isbn})}" method="post">
+					<input type="submit" value="Add to Cart" />
+				</form>
+			</td>
+		</tr>
+	</table>
+
 	<a th:href="@{/index}">Return to Main Page</a>
 </body>
 
