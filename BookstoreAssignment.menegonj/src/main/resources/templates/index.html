@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Online Bookstore</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+	<meta charset="UTF-8">
+	<title>Online Bookstore</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+	<style>
+		/* Add some basic styling for the navigation bar */
+		nav {
+			background-color: #f2f2f2;
+			overflow: hidden;
+		}
+
+		nav a {
+			float: left;
+			display: block;
+			color: black;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+	</style>
 </head>
+
 <body>
-    <h1>Welcome to the Online Bookstore</h1>
-    <p><a href="/books">Browse Books</a></p>
-    <p><a href="/cart">Add Books to shopping cart</a></p>
+	<!-- Navigation Bar -->
+	<nav>
+		<a href="#">Register</a>
+		<a href="#">Login</a>
+		<a href="/books">Add Books to List</a>
+		<a href="/cart">View Shopping Cart</a>
+	</nav>
+
+	<h1>Welcome to the Online Bookstore</h1>
+	
+	
+
 </body>
+
 </html>
