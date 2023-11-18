@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import ca.sheridancollege.menegonj.beans.Book;
 import ca.sheridancollege.menegonj.services.BookService;
@@ -27,17 +28,41 @@ public class CartController {
 
 	@GetMapping("/cart")
 	public String viewCart(Model model, HttpSession session) {
-	    List<Book> cart = (List<Book>) session.getAttribute("cart");
-	    model.addAttribute("cart", cart != null ? cart : new ArrayList<Book>());
-	    return "cart";
+		List<Book> cart = (List<Book>) session.getAttribute("cart");
+		model.addAttribute("cart", cart != null ? cart : new ArrayList<Book>());
+		return "cart";
 	}
 
 	@PostMapping("/addToCart/{isbn}")
-	public String addToCart(@PathVariable Long isbn, HttpSession session) {
+	public String addToCart(@PathVariable Long isbn, @RequestParam("quantity") int quantity, HttpSession session) {
 		Book bookToAdd = bookService.getBookByIsbn(isbn);
 
 		if (bookToAdd != null) {
-			cartService.addToCart(session, bookToAdd);
+			bookToAdd.setQuantity(quantity);
+
+			// Retrieve cart from session or initialize it if null
+			List<Book> cart = (List<Book>) session.getAttribute("cart");
+			if (cart == null) {
+				cart = new ArrayList<>();
+			}
+
+			// Check if the book already exists in the cart
+			boolean bookExists = false;
+			for (Book cartBook : cart) {
+				if (cartBook.getIsbn().equals(isbn)) {
+					cartBook.setQuantity(cartBook.getQuantity() + quantity); // Update quantity
+					bookExists = true;
+					break;
+				}
+			}
+
+			// If the book doesn't exist, add it to the cart
+			if (!bookExists) {
+				cart.add(bookToAdd);
+			}
+
+			// Update the cart in the session
+			session.setAttribute("cart", cart);
 		}
 
 		return "redirect:/books";
