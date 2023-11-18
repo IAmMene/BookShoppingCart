@@ -112,45 +112,4 @@ public class BookController {
 
         return "redirect:/books";
     }
-    
-    @GetMapping("/cart")
-    public String viewCart(Model model, HttpSession session) {
-        List<Book> cart = (List<Book>) session.getAttribute("cart");
-        model.addAttribute("cart", cart != null ? cart : new ArrayList<Book>());
-        return "cart";
-    }
-
-    @PostMapping("/addToCart/{isbn}")
-    public String addToCart(@PathVariable Long isbn, HttpSession session) {
-        List<Book> cart = (List<Book>) session.getAttribute("cart");
-        Book bookToAdd = bookService.getBookByIsbn(isbn);
-
-        if (cart == null) {
-            cart = new ArrayList<>();
-        }
-        cart.add(bookToAdd);
-        session.setAttribute("cart", cart);
-
-        return "redirect:/books";
-    }
-
-    @PostMapping("/updateCart")
-    public String updateCart(@ModelAttribute("cart") List<Book> cart, HttpSession session) {
-        session.setAttribute("cart", cart);
-        return "redirect:/cart";
-    }
-
-    @PostMapping("/checkout")
-    public String checkout(HttpSession session) {
-        List<Book> cart = (List<Book>) session.getAttribute("cart");
-        // Save the order details (book, quantity, and user) to your database
-        // This could involve creating an Order class and storing these details
-
-        // Clear the cart after placing the order
-        session.removeAttribute("cart");
-
-        return "redirect:/cart";
-    }
-
-
 }

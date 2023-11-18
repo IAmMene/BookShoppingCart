@@ -64,4 +64,36 @@ public class DatabaseAccess {
 	        System.out.println("Deleted book with ISBN " + isbn + " from the database.");
 	    }
 	}
+	
+	public void addToCart(Book book) {
+	    MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+	    namedParameters.addValue("isbn", book.getIsbn());
+	    namedParameters.addValue("quantity", book.getQuantity());
+
+	    String query = "INSERT INTO cart (isbn, quantity) VALUES (:isbn, :quantity)";
+	    jdbc.update(query, namedParameters);
+	}
+
+	public void updateCartItemQuantity(Long isbn, int quantity) {
+	    MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+	    namedParameters.addValue("isbn", isbn);
+	    namedParameters.addValue("quantity", quantity);
+
+	    String query = "UPDATE cart SET quantity = :quantity WHERE isbn = :isbn";
+	    jdbc.update(query, namedParameters);
+	}
+
+	public void removeCartItem(Long isbn) {
+	    MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+	    namedParameters.addValue("isbn", isbn);
+
+	    String query = "DELETE FROM cart WHERE isbn = :isbn";
+	    jdbc.update(query, namedParameters);
+	}
+
+	public List<Book> getCartItems() {
+	    String query = "SELECT * FROM book b JOIN cart c ON b.isbn = c.isbn";
+	    return jdbc.query(query, new BeanPropertyRowMapper<>(Book.class));
+	}
+
 }

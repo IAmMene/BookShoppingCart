@@ -49,9 +49,10 @@
 			<td th:text="${book.title}"></td>
 			<td th:text="${book.author}"></td>
 			<td th:text="${book.price}"></td>
-			<!-- Add to Cart button -->
+			<!-- Modify the form to include a quantity field -->
 			<td>
 				<form th:action="@{/addToCart/{isbn}(isbn=${book.isbn})}" method="post">
+					<input type="number" name="quantity" min="1" value="1" /> <!-- Quantity field -->
 					<input type="submit" value="Add to Cart" />
 				</form>
 			</td>
