@@ -15,25 +15,32 @@
 					<th>Author</th>
 					<th>Price</th>
 					<th>Quantity</th>
+					<th>Action</th>
 				</tr>
 				<tr th:each="book : ${cart}">
 					<td th:text="${book.title}"></td>
 					<td th:text="${book.author}"></td>
 					<td th:text="${book.price}"></td>
-					<td th:text="${book.quantity}"></td>
+					<td>
+						<input type="number" name="quantity" th:value="${book.quantity}" min="0" />
+					</td>
+					<td>
+						<button type="submit" th:value="${book.isbn}" name="isbn">Update</button>
+					</td>
 				</tr>
 			</table>
-			<input type="submit" value="Update Cart">
-		</form>
+			<!-- Within the cart.html file -->
+			<h2>Total Cost: $<span th:text="${totalCost}">0.00</span></h2>
 
+		</form>
 	</table>
 
 	<form th:action="@{/checkout}" method="post">
 		<input type="submit" value="Checkout">
 	</form>
 
-	<a th:href="@{/books}">Continue Shopping</a>
 	<a th:href="@{/index}">Return to Main Page</a>
+	<a th:href="@{/books}">Continue Shopping</a>
 </body>
 
 </html>

@@ -30,7 +30,22 @@ public class CartController {
 	public String viewCart(Model model, HttpSession session) {
 		List<Book> cart = (List<Book>) session.getAttribute("cart");
 		model.addAttribute("cart", cart != null ? cart : new ArrayList<Book>());
+
+		// Calculate total cost
+		double totalCost = calculateTotalCost(cart);
+		model.addAttribute("totalCost", totalCost);
+
 		return "cart";
+	}
+
+	private double calculateTotalCost(List<Book> cart) {
+		double totalCost = 0.0;
+		if (cart != null) {
+			for (Book book : cart) {
+				totalCost += (book.getPrice() * book.getQuantity());
+			}
+		}
+		return totalCost;
 	}
 
 	@PostMapping("/addToCart/{isbn}")
@@ -69,24 +84,26 @@ public class CartController {
 	}
 
 	@PostMapping("/updateCart")
-	public String updateCart(@ModelAttribute("cart") List<Book> updatedCart, HttpSession session) {
+	public String updateCart(@RequestParam("isbn") Long isbn, @RequestParam("quantity") int quantity,
+			HttpSession session) {
 		List<Book> cart = (List<Book>) session.getAttribute("cart");
 
-		for (Book updatedBook : updatedCart) {
-			for (Book cartBook : cart) {
-				if (updatedBook.getIsbn().equals(cartBook.getIsbn())) {
-					int newQuantity = updatedBook.getQuantity();
-					if (newQuantity <= 0) {
-						cart.remove(cartBook);
-					} else {
-						cartBook.setQuantity(newQuantity);
+		if (cart != null) {
+			if (quantity <= 0) {
+				// Remove the book if quantity is less than or equal to 0
+				cart.removeIf(book -> book.getIsbn().equals(isbn));
+			} else {
+				// Update the quantity for the book
+				for (Book cartBook : cart) {
+					if (cartBook.getIsbn().equals(isbn)) {
+						cartBook.setQuantity(quantity);
+						break;
 					}
-					break;
 				}
 			}
+			session.setAttribute("cart", cart);
 		}
 
-		session.setAttribute("cart", cart);
 		return "redirect:/cart";
 	}
 
