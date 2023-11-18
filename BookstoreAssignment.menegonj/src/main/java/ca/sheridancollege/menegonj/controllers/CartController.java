@@ -83,29 +83,55 @@ public class CartController {
 		return "redirect:/books";
 	}
 
+//	@PostMapping("/updateCart")
+//	public String updateCart(@RequestParam("isbn") Long isbn, @RequestParam("quantity") int quantity,
+//			HttpSession session) {
+//		List<Book> cart = (List<Book>) session.getAttribute("cart");
+//
+//		if (cart != null) {
+//			if (quantity <= 0) {
+//				// Remove the book if quantity is less than or equal to 0
+//				cart.removeIf(book -> book.getIsbn().equals(isbn));
+//			} else {
+//				// Update the quantity for the book
+//				for (Book cartBook : cart) {
+//					if (cartBook.getIsbn().equals(isbn)) {
+//						cartBook.setQuantity(quantity);
+//						break;
+//					}
+//				}
+//			}
+//			session.setAttribute("cart", cart);
+//		}
+//
+//		return "redirect:/cart";
+//	}
+	
 	@PostMapping("/updateCart")
 	public String updateCart(@RequestParam("isbn") Long isbn, @RequestParam("quantity") int quantity,
-			HttpSession session) {
-		List<Book> cart = (List<Book>) session.getAttribute("cart");
+	        HttpSession session) {
+	    List<Book> cart = (List<Book>) session.getAttribute("cart");
 
-		if (cart != null) {
-			if (quantity <= 0) {
-				// Remove the book if quantity is less than or equal to 0
-				cart.removeIf(book -> book.getIsbn().equals(isbn));
-			} else {
-				// Update the quantity for the book
-				for (Book cartBook : cart) {
-					if (cartBook.getIsbn().equals(isbn)) {
-						cartBook.setQuantity(quantity);
-						break;
-					}
-				}
-			}
-			session.setAttribute("cart", cart);
-		}
+	    if (cart != null) {
+	        if (quantity <= 0) {
+	            // Remove the book if quantity is less than or equal to 0
+	            cart.removeIf(book -> book.getIsbn().equals(isbn));
+	        } else {
+	            // Update the quantity for the book
+	            for (Book cartBook : cart) {
+	                if (cartBook.getIsbn().equals(isbn)) {
+	                    cartBook.setQuantity(quantity);
+	                    break;
+	                }
+	            }
+	        }
+	        session.setAttribute("cart", cart);
+	    }
 
-		return "redirect:/cart";
+	    return "redirect:/cart";
 	}
+
+
 
 	@PostMapping("/checkout")
 	public String checkout(HttpSession session) {
