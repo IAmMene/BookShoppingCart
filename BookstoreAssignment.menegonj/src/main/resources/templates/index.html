@@ -33,9 +33,30 @@
 	</nav>
 
 	<h1>Welcome to the Online Bookstore</h1>
-	
-	
-
+	<!-- Available Books Table -->
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.price}"></td>
+            <td>
+                <form th:action="@{/addToCart/{isbn}(isbn=${book.isbn})}" method="post">
+                    <input type="number" name="quantity" min="1" value="1" />
+                    <input type="submit" value="Add to Cart" />
+                </form>
+            </td>
+            <td>
+                <a th:href="@{'/books/' + ${book.isbn}}">View Details</a>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>
